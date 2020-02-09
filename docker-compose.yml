@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  reformatting_tool:
+    build:
+      context: .
+    volumes:
+      - ./:/go/src/reformatting_tool:rw

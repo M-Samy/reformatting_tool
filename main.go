@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"strconv"
 	"encoding/json"
+
 	resources "reformatting_tool/data"
 )
 
@@ -33,8 +34,8 @@ func main() {
 	//Skip the header row
 	csvData = csvData[1:]
 
-	var hotel *resources.Hotel
-	var hotels []Hotel
+	var hotel resources.Hotel
+	var hotels []resources.Hotel
 
 	for _, each := range csvData {
 		hotel.Name = each[0]
