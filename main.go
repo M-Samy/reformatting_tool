@@ -3,64 +3,63 @@ package main
 import (
 	"os"
 	"fmt"
-	"encoding/csv"
-	"strconv"
-	"encoding/json"
-
+	"reformatting_tool/data/factories"
+	"strings"
 	resources "reformatting_tool/data"
 )
 
 func main() {
-	csvFile, err := os.Open("./hotels.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer csvFile.Close()
 
-	reader := csv.NewReader(csvFile)
-	reader.FieldsPerRecord = -1
+	readerFactory := factories.ReaderFactory{}
+	formatterFactory := factories.FormatterFactory{}
+	writterFactory := factories.WriterFactory{}
 
-	csvData, err := reader.ReadAll()
-	if err != nil {
+	err, readerFile := readerFactory.GetReader(os.Getenv("READER_EXTENSION"))
+	// TODO move if error to common function
+	if err !=  nil{
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	headersArr := make([]string, 0)
-	for _, headE := range csvData[0] {
-		headersArr = append(headersArr, headE)
-	}
-
-	//Skip the header row
-	csvData = csvData[1:]
-
-	var hotel resources.Hotel
-	var hotels []resources.Hotel
-
-	for _, each := range csvData {
-		hotel.Name = each[0]
-		hotel.Address = each[1]
-		hotel.Stars, _ = strconv.Atoi(each[2])
-		hotel.Contact = each[3]
-		hotel.Phone = each[4]
-		hotel.URL = each[5]
-		hotels = append(hotels, hotel)
-	}
-
-	// Convert to JSON
-	jsonData, err := json.Marshal(hotels)
-	if err != nil {
+	err, formatter := formatterFactory.GetFormatter(os.Getenv("READER_EXTENSION"))
+	if err !=  nil{
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-
-	jsonFile, err := os.Create("./data.json")
-	if err != nil {
+	err, data := readerFile.ReadFile(os.Getenv("SOURCEFILE"))
+	if err !=  nil{
 		fmt.Println(err)
+		os.Exit(1)
 	}
-	defer jsonFile.Close()
 
-	jsonFile.Write(jsonData)
-	jsonFile.Close()
+	err, formattedData := formatter.FormatData(data)
+	if err !=  nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	MultipleExtensionsWrite(os.Getenv("WRITER_EXTENSION"), formattedData, writterFactory)
+}
+
+//TODO move this function outside main
+func MultipleExtensionsWrite(validExtensions string, formattedData []resources.Hotel, writterFactory factories.WriterFactory) {
+	extensions := strings.Split(validExtensions, ",")
+	destinationFile := os.Getenv("DESTFILE")
+	for index := range extensions {
+		extension := strings.TrimSpace(extensions[index])
+		extension = strings.ToUpper(extension)
+
+		err, writerFile := writterFactory.GetWriter(extension)
+		if err !=  nil{
+			fmt.Println(err)
+			continue
+		}
+
+		err = writerFile.WriteToFile(destinationFile, formattedData)
+
+		if err !=  nil{
+			fmt.Println(err)
+		}
+	}
 }

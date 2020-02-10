@@ -6,3 +6,5 @@ services:
       context: .
     volumes:
       - ./:/go/src/reformatting_tool:rw
+    env_file:
+      - .env
