@@ -8,7 +8,7 @@ import (
 
 type JsonFile struct {}
 
-func (f JsonFile) WriteToFile(filePath string, data []resources.Hotel) (error) {
+func (jf JsonFile) WriteToFile(filePath string, data []resources.Hotel) (error) {
 	filePath = filePath + ".json"
 	// Convert to JSON
 	jsonData, err := json.Marshal(data)
