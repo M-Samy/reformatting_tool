@@ -22,11 +22,6 @@ func (f CsvReaderFile) ReadFile(filePath string) (error, [][]string){
 		return err, [][]string{}
 	}
 
-	headersArr := make([]string, 0)
-	for _, headE := range csvData[0] {
-		headersArr = append(headersArr, headE)
-	}
-
 	//Skip the header row
 	csvData = csvData[1:]
 

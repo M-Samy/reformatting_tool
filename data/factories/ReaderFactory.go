@@ -11,6 +11,6 @@ func (rf ReaderFactory) GetReader(readerName string) (error, ex.ReaderExtension)
 	if readerName == "CSV" {
 		return nil, ex.CsvReaderFile{}
 	}else {
-		return fmt.Errorf("reader type not suported"), nil
+		return fmt.Errorf("reader type not supported"), nil
 	}
 }

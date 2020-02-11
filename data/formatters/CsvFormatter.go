@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	resources "reformatting_tool/data"
+	validator "reformatting_tool/validations"
 )
 
 type CsvFormatter struct {}
@@ -24,6 +25,11 @@ func (cs CsvFormatter) FormatData(data interface{}) (error, []resources.Hotel){
 		hotel.Contact = each[3]
 		hotel.Phone = each[4]
 		hotel.URL = each[5]
+
+		if !validator.ValidateString(hotel.Name) {
+			fmt.Println(hotel.Name)
+			continue
+		}
 		hotels = append(hotels, hotel)
 	}
 
