@@ -19,17 +19,18 @@ func (cs CsvFormatter) FormatData(data interface{}) (error, []resources.Hotel){
 	}
 
 	for _, each := range data.([][]string) {
+
+		if !validator.Validate(each[0], each[5], each[2]) {
+			continue
+		}
+
 		hotel.Name = each[0]
 		hotel.Address = each[1]
-		hotel.Stars, _ = strconv.Atoi(each[2])
+		hotel.Stars, _ = strconv.ParseFloat(each[2], 64)
 		hotel.Contact = each[3]
 		hotel.Phone = each[4]
 		hotel.URL = each[5]
 
-		if !validator.ValidateString(hotel.Name) {
-			fmt.Println(hotel.Name)
-			continue
-		}
 		hotels = append(hotels, hotel)
 	}
 
