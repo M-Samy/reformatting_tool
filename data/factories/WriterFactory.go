@@ -1,8 +1,8 @@
 package factories
 
 import (
-	ex "reformatting_tool/data/extensions"
 	"fmt"
+	ex "reformatting_tool/data/extensions"
 )
 
 type WriterFactory struct {}

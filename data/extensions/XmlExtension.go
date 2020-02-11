@@ -16,7 +16,10 @@ func (xf XmlFile) WriteToFile(filePath string, data []resources.Hotel) (error) {
 		return err
 	}
 
-	_ = ioutil.WriteFile(filePath, file, 0644)
+	err = ioutil.WriteFile(filePath, file, 0644)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
