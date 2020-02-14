@@ -31,7 +31,15 @@ Steps that tells you how to get a build and run this tool.
 cd reformatting_tool
 ```
 
-* Go to .env file and write which extensions you need to convert to. "This tool now supports only json and xml formats"
+* Go to .env file and write which extensions you need to convert to. "This tool now supports only json and xml formats".
+```
+.env file contains:
+* READER_EXTENSION - The extension format that we read from, "Only CSV supported till now".
+* WRITER_EXTENSION - The extensions that we need to convert to, comma separated, "Only JSON amd XML supported till now"
+* SOURCEFILE - The name of file we read from.
+* DESTFILE - The name of file we will write to.
+
+```
 
 * Run docker-compose.yml file.
 ```
